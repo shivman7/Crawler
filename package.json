@@ -1,0 +1,24 @@
+{
+  "name": "crawler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivman7/Crawler.git"
+  },
+  "author": "Shivanshu Jaiswal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shivman7/Crawler/issues"
+  },
+  "homepage": "https://github.com/shivman7/Crawler#readme",
+  "dependencies": {
+    "redis": "^2.8.0",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2"
+  }
+}
