@@ -46,7 +46,7 @@ function bfsCrawler() {
                             console.log('Crawling Finised!');
                         }
                     }).catch((err) => {
-                        console.log(err);
+                        console.log("Erroed URL " + request.url);
                         if(requestQueue.length > 0) {
                             currentRunning--;
                             nextRequest();
