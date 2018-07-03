@@ -11,7 +11,6 @@ const validUrl=/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+
 
 function bfsCrawler() {
     let request = requestQueue.shift();
-    console.log(request);
     redis.getValue(countKey, request.url).then((value) => {
         if(value) {
             redis.setValue(countKey, request.url, parseInt(value) + 1).then(() => {
@@ -69,7 +68,6 @@ function bfsCrawler() {
 }
 
 function nextRequest() {
-    console.log("Concurrent connections = "+currentRunning);
     if (currentRunning < maxConcurrent) {
         while (currentRunning <= maxConcurrent)
           {

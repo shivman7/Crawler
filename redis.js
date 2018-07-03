@@ -50,7 +50,7 @@ function setParams(key, field, params) {
                     if(err) {
                         reject(err);
                     } else {
-                        console.log('Params updated Successfully');
+                        // console.log('Params updated Successfully');
                         resolve();
                     }
                 });
@@ -59,7 +59,7 @@ function setParams(key, field, params) {
                     if(err) {
                         reject(err);
                     } else {
-                        console.log('Params saved Successfully');
+                        // console.log('Params saved Successfully');
                         resolve();
                     }
                 });
