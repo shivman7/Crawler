@@ -16,11 +16,11 @@ Run the following script
     ./dockerBuild_async.sh
 ## For Promise version
     ./dockerBuild.sh
-    
-# Result
-To see the result of the Crawler open redis-cli on your system and type the following commands.
 ## For redis-cli run 
     npm run ssh-redis
+    
+# Result
+To see the result of the Crawler open redis-client on your system and type the following commands.
 ## For getting Occurnce
     HGETALL _count
 ## For getting Params
