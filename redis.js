@@ -25,7 +25,6 @@ function clearRedis() {
                 if(err) {
                     reject(err);
                 }
-                console.log('Redis memory cleared');
                 resolve();
             });
         });

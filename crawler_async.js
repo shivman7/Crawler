@@ -47,9 +47,9 @@ async function bfsCrawler() {
         }
         request_promise.get(request.url).then(html => {
             var urls = scrapper.getUrlsFromBody(html);
-            urls.forEach((url) => {
-                if(validUrl.test(url.url)) {
-                requestQueue.push(url);
+            urls.forEach((eachUrl) => {
+                if(validUrl.test(eachUrl.url)) {
+                requestQueue.push(eachUrl);
                 }
             });
             if(requestQueue.length > 0) {

@@ -7,11 +7,12 @@ function getUrlsFromBody(html) {
     while((match = regex.exec(html)) !== null){
         urls.push(match[1]);
     }
-    // urls = [ 'https://medium.com/some/thing', 'https://medium.com/some/thing?param1=abc', 'https://medium/com/some/thing?param2=xyz', 'https://medium/com/some/thing?param1=def&param3=xxx'];
+    // urls = [ 'https://medium.com/some/thing', 'https://medium.com/some/thing?param1=abc', 'https://medium.com/some/thing?param2=xyz', 'https://medium.com/some/thing?param1=def&param3=xxx'];
     if(urls) {
         urls.forEach(url => {
-            if(!(url.includes('.css') || url.includes('.js') || url.includes('.jpg')))
-            arr.push({url : url, params : getParamsFromUrl(url)});
+            if(!(url.includes('.css') || url.includes('.js') || url.includes('.jpg'))) {
+                arr.push({'url' : url.split('?')[0], 'params' : getParamsFromUrl(url)});
+            }
         });
     }
     return arr;
