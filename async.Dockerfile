@@ -2,8 +2,8 @@ FROM node:8
 MAINTAINER Shivanshu Jaiswal "shivanshujaiswal@gmail.com"
 
 #Setting up app
-WORKDIR /Crawler
-COPY package.json /Crawler
+WORKDIR /Crawler-async
+COPY package.json /Crawler-async
 RUN npm install
-COPY . /Crawler
+COPY . /Crawler-async
 CMD ["npm", "start-async"]
