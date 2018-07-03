@@ -1,4 +1,0 @@
-module.expors = {
-    url : '',
-    params : []
-}

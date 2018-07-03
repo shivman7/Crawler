@@ -1,4 +1,4 @@
-var redis = require("redis"),
+var redis = require("redis");
     
 client = redis.createClient();
 
@@ -25,4 +25,4 @@ module.exports = {
     connect : connect,
     getValue : getValue,
     setValue : setValue
-}
+};
