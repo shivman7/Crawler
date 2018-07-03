@@ -17,7 +17,9 @@ function bfsCrawler() {
             redis.setValue(countKey, request.url, parseInt(value) + 1).then(() => {
                redis.setParams(paramsKey, request.url, request.params).then(() => {
                    if(requestQueue.length > 0) {
-                        bfsCrawler();
+                       currentRunning--;
+                       nextRequest();
+                        // bfsCrawler();
                    } else {
                         console.log('Crawling Finished!')
                    }
@@ -38,14 +40,18 @@ function bfsCrawler() {
                             }
                         });
                         if(requestQueue.length > 0) {
-                            bfsCrawler();
+                            currentRunning--;
+                            nextRequest();
+                            // bfsCrawler();
                         } else {
                             console.log('Crawling Finised!');
                         }
                     }).catch((err) => {
                         console.log(err);
                         if(requestQueue.length > 0) {
-                            bfsCrawler();
+                            currentRunning--;
+                            nextRequest();
+                            // bfsCrawler();
                         } else {
                             console.log('Crawling Finised!');
                         }
@@ -63,13 +69,22 @@ function bfsCrawler() {
 }
 
 function nextRequest() {
-
+    console.log("Concurrent connections = "+currentRunning);
+    if (currentRunning < maxConcurrent) {
+        while (currentRunning <= maxConcurrent)
+          {
+            if(requestQueue.length == 0) { break; }
+            currentRunning++;
+            bfsCrawler();
+          }
+    }
 }
 
 function startCrawling(url) {
     requestQueue.push({'url' : url, 'params' : []});
     bfsCrawler();
 }
+
 module.exports = {
     startCrawling : startCrawling
 };

@@ -5,4 +5,4 @@ redis.connect().then(() => {
     crawler.startCrawling('https://www.medium.com');
 }, (err) => {
     console.log(err);
-})
+});
