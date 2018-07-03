@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "start-async": "node index_async.js",
+    "ssh-redis":"docker exec -it si-redis redis-cli"
   },
   "repository": {
     "type": "git",

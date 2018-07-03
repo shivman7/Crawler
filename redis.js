@@ -1,6 +1,6 @@
 let redis = require("redis");
     
-const client = redis.createClient({host : '127.0.0.1', port : '6379'});
+const client = redis.createClient({host : 'redis', port : '6379'});
 const countKey = '_count';
 const paramsKey = '_params';
 

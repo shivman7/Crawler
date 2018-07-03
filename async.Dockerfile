@@ -6,4 +6,4 @@ WORKDIR /Crawler
 COPY package.json /Crawler
 RUN npm install
 COPY . /Crawler
-CMD ["npm", "start"]
+CMD ["npm", "start-async"]
