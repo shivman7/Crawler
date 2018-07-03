@@ -1,6 +1,8 @@
 let redis = require("redis");
     
 const client = redis.createClient();
+const countKey = '_count';
+const paramsKey = '_params';
 
 function connect() {
     return new Promise((resolve, reject) => {
@@ -11,6 +13,23 @@ function connect() {
             reject(err);
         });
     })
+}
+
+function clearRedis() {
+    return new Promise((resolve, reject) => {
+        client.del(countKey, (err, value) => {
+            if(err){
+                reject(err);
+            }
+            client.del(paramsKey, (err, value) => {
+                if(err) {
+                    reject(err);
+                }
+                console.log('Redis memory cleared');
+                resolve();
+            });
+        });
+    });
 }
 
 function getValue(key, field) {
@@ -72,6 +91,7 @@ function setParams(key, field, params) {
 
 module.exports = { 
     connect : connect,
+    clearRedis : clearRedis,
     getValue : getValue,
     setValue : setValue,
     setParams : setParams
