@@ -1,4 +1,4 @@
-var arr = [];
+const arr = [];
 
 function getUrlsFromBody(html) {
     const regex = /href=\"(\S+)\"/g;
@@ -12,7 +12,7 @@ function getUrlsFromBody(html) {
         urls.forEach(url => {
             arr.push({url : url, params : getParamsFromUrl(url)});
         });
-    }console.log(arr)
+    }
     return arr;
 }
 
