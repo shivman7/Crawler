@@ -12,64 +12,56 @@ const validUrl=/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+
 async function bfsCrawler() {
     let request = requestQueue.shift();
     try {
-        var value = await redis.getValue(countKey, request.url);
-    } catch(err) {
-        console.log(err);
-    }
-    if(value) {
-        try {
-            await redis.setValue(countKey, request.url, parseInt(value) + 1)
-        } catch(err) {
-            console.log(err);
-        }
-        try {
-            await redis.setParams(paramsKey, request.url, request.params)
-        } catch(err) {
-            console.log(err);
-        }
-        if(requestQueue.length > 0) {
-            currentRunning--;
-            nextRequest();
-            // bfsCrawler();
-        } else {
-            console.log('Crawling Finished!')
-        }
-    } else {
-        try {
-            await redis.setValue(countKey, request.url, 1)
-        } catch(err) {
-            console.log(err);
-        }
-        try {
-            await redis.setParams(paramsKey, request.url, request.params)    
-        } catch(err) {
-            console.log(err);
-        }
-        try {
-            var html = await request_promise.get(request.url);
-        } catch(err) {
-            console.log("Erroed URL " + request.url);
+        let value = await redis.getValue(countKey, request.url);
+        if(value) {
+            try {
+                await redis.setValue(countKey, request.url, parseInt(value) + 1);
+                await redis.setParams(paramsKey, request.url, request.params);
+            } catch(err) {
+                console.log(err);
+            }
             if(requestQueue.length > 0) {
                 currentRunning--;
                 nextRequest();
                 // bfsCrawler();
             } else {
-                console.log('Crawling Finised!');
+                console.log('Crawling Finished!')
             }
-        }
-        var urls = scrapper.getUrlsFromBody(html);
-        urls.forEach((eachUrl) => {
-            if(validUrl.test(eachUrl.url)) {
-            requestQueue.push(eachUrl);
-            }
-        });
-        if(requestQueue.length > 0) {
-        currentRunning--;
-        nextRequest();
-        // bfsCrawler();
         } else {
-            console.log('Crawling Finised!');
+            try {
+                await redis.setValue(countKey, request.url, 1);
+                await redis.setParams(paramsKey, request.url, request.params);    
+            } catch(err) {
+                console.log(err);
+            }
+            try {
+                let html = await request_promise.get(request.url);
+                let urls = scrapper.getUrlsFromBody(html);
+                urls.forEach((eachUrl) => {
+                    if(validUrl.test(eachUrl.url)) {
+                    requestQueue.push(eachUrl);
+                    }
+                });
+                if(requestQueue.length > 0) {
+                currentRunning--;
+                nextRequest();
+                // bfsCrawler();
+                } else {
+                    console.log('Crawling Finised!');
+                }
+            } catch(err) {
+                console.log("Erroed URL " + request.url);
+                if(requestQueue.length > 0) {
+                    currentRunning--;
+                    nextRequest();
+                    // bfsCrawler();
+                } else {
+                    console.log('Crawling Finised!');
+                }
+            }
         }
+    } catch(err) {
+        console.log(err);
     }
 }
 
