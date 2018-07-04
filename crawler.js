@@ -13,39 +13,39 @@ function bfsCrawler() {
     let request = requestQueue.shift();
     redis.getValue(countKey, request.url).then((value) => {
         if(value) {
-            redis.setValue(countKey, request.url, parseInt(value) + 1).then(() => {
-               redis.setParams(paramsKey, request.url, request.params).then(() => {
-                   if(requestQueue.length > 0) {
-                       currentRunning--;
-                       nextRequest();
-                       // bfsCrawler();
-                   } else {
+            redis.setValue(countKey, request.url, parseInt(value) + 1)
+                .then(redis.setParams(paramsKey, request.url, request.params))
+                .then(() => {
+                    if(requestQueue.length > 0) {
+                        currentRunning--;
+                        nextRequest();
+                        // bfsCrawler();
+                    } else {
                         console.log('Crawling Finished!')
-                   }
-               }, (err) => {
-                   console.log(err);
-               });
-            }, (err) => {
-                console.log(err);
-            });
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                });
         } else {
-            redis.setValue(countKey, request.url, 1).then(() => {
-                redis.setParams(paramsKey, request.url, request.params).then(() => {
-                    request_promise.get(request.url).then(html => {
-                        var urls = scrapper.getUrlsFromBody(html);
-                        urls.forEach((eachUrl) => {
-                            if(validUrl.test(eachUrl.url)) {
-                                requestQueue.push(eachUrl);
-                            }
-                        });
-                        if(requestQueue.length > 0) {
-                            currentRunning--;
-                            nextRequest();
-                            // bfsCrawler();
-                        } else {
-                            console.log('Crawling Finised!');
+            redis.setValue(countKey, request.url, 1)
+                .then(redis.setParams(paramsKey, request.url, request.params))
+                .then(() => request_promise.get(request.url))
+                .then((html) => {
+                    var urls = scrapper.getUrlsFromBody(html);
+                    urls.forEach((eachUrl) => {
+                        if(validUrl.test(eachUrl.url)) {
+                            requestQueue.push(eachUrl);
                         }
-                    }).catch((err) => {
+                    });
+                    if(requestQueue.length > 0) {
+                        currentRunning--;
+                        nextRequest();
+                        // bfsCrawler();
+                    } else {
+                        console.log('Crawling Finised!');
+                    }
+                }, (err) => {
                         console.log("Erroed URL " + request.url);
                         if(requestQueue.length > 0) {
                             currentRunning--;
@@ -54,13 +54,10 @@ function bfsCrawler() {
                         } else {
                             console.log('Crawling Finised!');
                         }
-                    });
-                }, (err) => {
+                })
+                .catch((err) => {
                     console.log(err);
                 });
-            }, (err) => {
-                console.log(err);
-            });
         }
     }, (err) => {
         console.log(err);

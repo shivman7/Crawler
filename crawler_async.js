@@ -45,22 +45,10 @@ async function bfsCrawler() {
         } catch(err) {
             console.log(err);
         }
-        request_promise.get(request.url).then(html => {
-            var urls = scrapper.getUrlsFromBody(html);
-            urls.forEach((eachUrl) => {
-                if(validUrl.test(eachUrl.url)) {
-                requestQueue.push(eachUrl);
-                }
-            });
-            if(requestQueue.length > 0) {
-            currentRunning--;
-            nextRequest();
-            // bfsCrawler();
-            } else {
-                console.log('Crawling Finised!');
-            }
-        }).catch((err) => {
-            console.log(err);
+        try {
+            var html = await request_promise.get(request.url);
+        } catch(err) {
+            console.log("Erroed URL " + request.url);
             if(requestQueue.length > 0) {
                 currentRunning--;
                 nextRequest();
@@ -68,7 +56,20 @@ async function bfsCrawler() {
             } else {
                 console.log('Crawling Finised!');
             }
+        }
+        var urls = scrapper.getUrlsFromBody(html);
+        urls.forEach((eachUrl) => {
+            if(validUrl.test(eachUrl.url)) {
+            requestQueue.push(eachUrl);
+            }
         });
+        if(requestQueue.length > 0) {
+        currentRunning--;
+        nextRequest();
+        // bfsCrawler();
+        } else {
+            console.log('Crawling Finised!');
+        }
     }
 }
 
